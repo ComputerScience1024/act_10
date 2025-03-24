@@ -7,7 +7,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const appTitle = 'Signup Form Activity';
+    const appTitle = 'Signup Form App';
     return MaterialApp(
       title: appTitle,
       home: Scaffold(
@@ -81,6 +81,18 @@ class MyCustomFormState extends State<MyCustomForm> {
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'Please select your date of birth';
+              }
+              return null;
+            },
+          ),
+          TextFormField(
+            decoration: const InputDecoration(labelText: 'Phone Number'),
+            keyboardType: TextInputType.phone,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter your phone number';
+              } else if (!RegExp(r'^\d{10,}$').hasMatch(value)) {
+                return 'Enter a valid phone number (min 10 digits)';
               }
               return null;
             },
