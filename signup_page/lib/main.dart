@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
 
 void main() => runApp(const MyApp());
 
@@ -8,7 +7,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const appTitle = 'Signup Form Demo';
+    const appTitle = 'Signup Form Activity';
     return MaterialApp(
       title: appTitle,
       home: Scaffold(
@@ -30,90 +29,90 @@ class MyCustomForm extends StatefulWidget {
 
 class MyCustomFormState extends State<MyCustomForm> {
   final _formKey = GlobalKey<FormState>();
-
   final TextEditingController _dobController = TextEditingController();
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime(2000),
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now(),
+    );
+    if (picked != null) {
+      setState(() {
+        _dobController.text = "${picked.toLocal()}".split(' ')[0];
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Form(
       key: _formKey,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: ListView(
+        padding: const EdgeInsets.all(8.0),
         children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextFormField(
-              decoration: const InputDecoration(labelText: 'Name'),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter your name';
-                }
-                return null;
-              },
-            ),
+          TextFormField(
+            decoration: const InputDecoration(labelText: 'Name'),
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter your name';
+              }
+              return null;
+            },
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextFormField(
-              decoration: const InputDecoration(labelText: 'Email'),
-              keyboardType: TextInputType.emailAddress,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter an email address';
-                } else if (!RegExp(r'\S+@\S+\.\S+').hasMatch(value)) {
-                  return 'Enter a valid email address';
-                }
-                return null;
-              },
-            ),
+          TextFormField(
+            decoration: const InputDecoration(labelText: 'Email'),
+            keyboardType: TextInputType.emailAddress,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter an email address';
+              } else if (!RegExp(r'\S+@\S+\.\S+').hasMatch(value)) {
+                return 'Enter a valid email address';
+              }
+              return null;
+            },
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextFormField(
-              controller: _dobController,
-              decoration: const InputDecoration(labelText: 'Date of Birth'),
-              keyboardType: TextInputType.datetime,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter your date of birth';
-                }
-                return null;
-              },
-            ),
+          TextFormField(
+            controller: _dobController,
+            decoration: const InputDecoration(labelText: 'Date of Birth'),
+            readOnly: true,
+            onTap: () => _selectDate(context),
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please select your date of birth';
+              }
+              return null;
+            },
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextFormField(
-              decoration: const InputDecoration(labelText: 'Password'),
-              obscureText: true,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter a password';
-                } else if (value.length < 6) {
-                  return 'Password must be at least 6 characters';
-                }
-                return null;
-              },
-            ),
+          TextFormField(
+            decoration: const InputDecoration(labelText: 'Password'),
+            obscureText: true,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter a password';
+              } else if (value.length < 6) {
+                return 'Password must be at least 6 characters';
+              }
+              return null;
+            },
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16),
-            child: ElevatedButton(
-              onPressed: () {
-                if (_formKey.currentState!.validate()) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Processing Data')),
-                  );
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const SuccessScreen(),
-                    ),
-                  );
-                }
-              },
-              child: const Text('Submit'),
-            ),
+          const SizedBox(height: 16),
+          ElevatedButton(
+            onPressed: () {
+              if (_formKey.currentState!.validate()) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Processing Data')),
+                );
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const SuccessScreen(),
+                  ),
+                );
+              }
+            },
+            child: const Text('Submit'),
           ),
         ],
       ),
@@ -127,9 +126,9 @@ class SuccessScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Success')),
-      body: Center(
-        child: const Text('Signup Successful!'),
+      appBar: AppBar(title: const Text('Success Page')),
+      body: const Center(
+        child: Text('Signup Successful!'),
       ),
     );
   }
